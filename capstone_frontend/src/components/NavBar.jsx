@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import List from "@mui/material/List";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -13,14 +13,22 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import Drawer from "@mui/material/Drawer";
 import ListItem from "@mui/material/ListItem";
 import Switch from "@mui/material/Switch";
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import { Menu, MenuItem } from "@mui/material";
+import { Link as MUILink } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleTheme } from "../slice/themeSlice";
+import { useLogoutUserMutation } from "../api/metalApi";
 
 const NavBar = () => {
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const dispatch = useDispatch();
+  const darkTheme = useSelector((state) => state.theme.darkTheme);
+  const userId = localStorage.getItem("userId");
+  const [logoutUser] = useLogoutUserMutation();
+  const [id, setId] = useState(localStorage.getItem("userId"));
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -34,11 +42,23 @@ const NavBar = () => {
     setAnchorEl(null);
   };
 
-  const handleThemeChange = (event) => {
-    event.preventDefault();
-    const isDarkMode = event.target.checked;
-    console.log("Dark mode enabled:", isDarkMode);
-    return isDarkMode;
+  const handleThemeChange = () => {
+    dispatch(toggleTheme());
+  };
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    setId(storedUserId);
+  }, [location]);
+
+  const handleLogout = async () => {
+    try {
+      const Id = localStorage.getItem("userId");
+      await logoutUser({ Id });
+      localStorage.removeItem("userId");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
 
   return (
@@ -78,15 +98,36 @@ const NavBar = () => {
               inputProps={{ "aria-label": "search" }}
             />
           </div>
-          <IconButton
-            size="large"
-            edge="end"
-            color="inherit"
-            aria-label="account of current user"
-            onClick={handleClick}
-          >
-            <AccountCircle />
-          </IconButton>
+          {userId ? (
+            <IconButton
+              size="large"
+              edge="end"
+              color="inherit"
+              aria-label="account of current user"
+              onClick={handleClick}
+            >
+              <AccountCircle />
+            </IconButton>
+          ) : (
+            <div>
+              <Link
+                to="/login"
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  marginRight: "1rem",
+                }}
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                Sign up
+              </Link>
+            </div>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer anchor="left" open={menuOpen} onClose={toggleMenu}>
@@ -96,26 +137,10 @@ const NavBar = () => {
               Products
             </Link>
           </ListItem>
-          <ListItem button onClick={toggleMenu}>
-            <Link
-              to="/login"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              Login
-            </Link>
-          </ListItem>
-          <ListItem button onClick={toggleMenu}>
-            <Link
-              to="/register"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              Signup
-            </Link>
-          </ListItem>
         </List>
         <Box sx={{ mt: "auto", p: 2 }}>
           <Typography variant="h6">Theme</Typography>
-          <Switch onChange={handleThemeChange} />
+          <Switch checked={darkTheme} onChange={handleThemeChange} />
         </Box>
       </Drawer>
       <Menu
@@ -131,7 +156,7 @@ const NavBar = () => {
         <MenuItem component={Link} to="/accountinfo" onClick={handleClose}>
           My account
         </MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </Box>
   );

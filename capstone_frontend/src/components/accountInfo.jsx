@@ -1,18 +1,21 @@
-import { useSelector } from "react-redux";
-import getUserSlice from "../slice/getUserSlice";
+import React, { useEffect } from "react";
+import { useGetUserQuery } from "../api/metalApi";
 
 const AccountInfo = () => {
-  const userData = useSelector((state) => state.getUser.userData);
+  const userId = localStorage.getItem("userId");
+  const { data: fetchedUserData, isLoading, isError } = useGetUserQuery(userId);
+
+  if (isLoading) return <p>Loading user data...</p>;
+  if (isError) return <p>Error fetching user data</p>;
+  if (!fetchedUserData) return null;
+
+  const fullName = `${fetchedUserData.firstName} ${fetchedUserData.lastName}`;
 
   return (
     <div>
-      {userData && (
-        <div>
-          <h2>User Information</h2>
-          <p>Name: {userData.name}</p>
-          <p>Email: {userData.email}</p>
-        </div>
-      )}
+      <h2>User Information</h2>
+      <p>Name: {fullName}</p>
+      <p>Email: {fetchedUserData.email}</p>
     </div>
   );
 };

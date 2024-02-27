@@ -22,8 +22,51 @@ export const metalApi = createApi({
         body: userData,
       }),
     }),
+    logoutUser: builder.mutation({
+      query: (userData) => ({
+        url: "/auth/user/logout",
+        method: "DELETE",
+        body: userData,
+      }),
+    }),
     getProducts: builder.query({ query: () => "/api/products" }),
     getProduct: builder.query({ query: (id) => `/api/products/${id}` }),
+    updateProduct: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/api/products/${id}`,
+        method: "PUT",
+        body: formData,
+      }),
+    }),
+    addProduct: builder.mutation({
+      query: (productData) => ({
+        url: "/api/products",
+        method: "POST",
+        body: productData,
+      }),
+    }),
+    deleteProduct: builder.mutation({
+      query: (id) => ({
+        url: `/api/products/${id}`,
+        method: "DELETE",
+      }),
+    }),
+    addToCart: builder.mutation({
+      query: ({ userId, productId, quantity }) => ({
+        url: `/auth/users/${userId}/cart`,
+        method: "POST",
+        body: { productId, quantity },
+      }),
+    }),
+    removeFromCart: builder.mutation({
+      query: ({ userId, cartItemId }) => ({
+        url: `/auth/users/${userId}/cart/${cartItemId}`,
+        method: "DELETE",
+      }),
+    }),
+    getCartItems: builder.query({
+      query: (userId) => `/auth/users/${userId}/cart`,
+    }),
   }),
 });
 
@@ -32,6 +75,13 @@ export const {
   useGetUserQuery,
   useRegisterUserMutation,
   useLoginUserMutation,
+  useLogoutUserMutation,
   useGetProductsQuery,
   useGetProductQuery,
+  useUpdateProductMutation,
+  useAddProductMutation,
+  useDeleteProductMutation,
+  useAddToCartMutation,
+  useRemoveFromCartMutation,
+  useGetCartItemsQuery,
 } = metalApi;

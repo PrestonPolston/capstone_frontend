@@ -1,60 +1,62 @@
-import React, { useState } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import GetAllProducts from "./components/products";
 import GetAllUsers from "./components/GetUser";
 import Login from "./components/login";
 import NavBar from "./components/NavBar";
-import { createTheme } from "@mui/material/styles";
-import { blueGrey } from "@mui/material/colors";
 import Register from "./components/register";
 import AccountInfo from "./components/accountInfo";
-
-export const lightTheme = createTheme({
-  palette: {
-    mode: "light",
-    primary: {
-      main: "#2196f3",
-    },
-    secondary: {
-      main: "#f50057",
-    },
-  },
-});
-
-export const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-    primary: {
-      main: blueGrey[900],
-    },
-    secondary: {
-      main: blueGrey[700],
-    },
-  },
-});
+import SingleProduct from "./components/SingleProduct";
+import { useSelector } from "react-redux";
+import CartIcon from "./components/CartIcon";
+import Cart from "./components/Cart";
 
 function App() {
-  const [theme, setTheme] = useState("light");
+  const darkMode = useSelector((state) => state.theme.darkTheme);
 
-  const handleThemeChangeApp = (isDarkMode) => {
-    const newTheme = isDarkMode ? "dark" : "light";
-    console.log("Theme changed to:", newTheme);
-    setTheme(newTheme);
-  };
+  const theme = createTheme({
+    palette: {
+      mode: darkMode ? "dark" : "light",
+      primary: {
+        main: darkMode ? "#9c27b0" : "#1976d2",
+      },
+      background: {
+        default: darkMode ? "#222" : "#fff",
+      },
+      text: {
+        primary: darkMode ? "#fff" : "#111111",
+      },
+    },
+    typography: {
+      fontFamily: "Roboto, sans-serif",
+    },
+    spacing: 8,
+  });
 
   return (
-    <div>
-      <div>
-        <NavBar onThemeChange={handleThemeChangeApp} />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <div
+        style={{
+          paddingTop: "64px",
+          paddingLeft: "16px",
+          paddingRight: "16px",
+        }}
+      >
+        <NavBar />
+        <Routes>
+          <Route path="/users" element={<GetAllUsers />} />
+          <Route path="/" element={<GetAllProducts />} />
+          <Route path="/product/:id" element={<SingleProduct />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/accountinfo" element={<AccountInfo />} />
+          <Route path="/cart" element={<Cart />} />
+        </Routes>
+        <CartIcon />
       </div>
-      <Routes>
-        <Route path="/users" element={<GetAllUsers />} />
-        <Route path="/" element={<GetAllProducts />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/accountinfo" element={<AccountInfo />} />
-      </Routes>
-    </div>
+    </ThemeProvider>
   );
 }
 

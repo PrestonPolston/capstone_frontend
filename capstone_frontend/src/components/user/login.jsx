@@ -11,7 +11,7 @@ import { Link as MUILink } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { useLoginUserMutation } from "../api/metalApi";
+import { useLoginUserMutation } from "../../api/metalApi";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {

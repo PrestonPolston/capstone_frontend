@@ -67,6 +67,52 @@ export const metalApi = createApi({
     getCartItems: builder.query({
       query: (userId) => `/auth/users/${userId}/cart`,
     }),
+    getUserPreferences: builder.query({
+      query: (userId) => `/api/users/${userId}/preferences`,
+    }),
+    createUserPreferences: builder.mutation({
+      query: ({ userId, preferencesData }) => ({
+        url: `/api/users/${userId}/preferences`,
+        method: "POST",
+        body: preferencesData,
+      }),
+    }),
+    updateUserPreferences: builder.mutation({
+      query: ({ userId, preferencesData }) => ({
+        url: `/api/users/${userId}/preferences`,
+        method: "PUT",
+        body: preferencesData,
+      }),
+    }),
+    deleteUserPreferences: builder.mutation({
+      query: (userId) => ({
+        url: `/api/users/${userId}/preferences`,
+        method: "DELETE",
+      }),
+    }),
+    getReview: builder.query({
+      query: ({ productId }) => `/api/products/${productId}/reviews`,
+    }),
+    createReview: builder.mutation({
+      query: ({ productId, reviewData }) => ({
+        url: `/api/products/${productId}/reviews`,
+        method: "POST",
+        body: reviewData,
+      }),
+    }),
+    updateReview: builder.mutation({
+      query: ({ productId, reviewId, reviewData }) => ({
+        url: `/api/products/${productId}/reviews/${reviewId}`,
+        method: "PUT",
+        body: reviewData,
+      }),
+    }),
+    deleteReview: builder.mutation({
+      query: ({ productId, reviewId }) => ({
+        url: `/api/products/${productId}/reviews/${reviewId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -84,4 +130,12 @@ export const {
   useAddToCartMutation,
   useRemoveFromCartMutation,
   useGetCartItemsQuery,
+  useGetUserPreferencesQuery,
+  useCreateUserPreferencesMutation,
+  useUpdateUserPreferencesMutation,
+  useDeleteUserPreferencesMutation,
+  useGetReviewQuery,
+  useCreateReviewMutation,
+  useUpdateReviewMutation,
+  useDeleteReviewMutation,
 } = metalApi;

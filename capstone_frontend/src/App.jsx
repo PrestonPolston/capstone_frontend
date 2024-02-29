@@ -2,15 +2,15 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import GetAllProducts from "./components/products";
-import GetAllUsers from "./components/GetUser";
-import Login from "./components/login";
+import GetAllUsers from "./components/user/GetUser";
+import Login from "./components/user/login";
 import NavBar from "./components/NavBar";
-import Register from "./components/register";
-import AccountInfo from "./components/accountInfo";
-import SingleProduct from "./components/SingleProduct";
+import Register from "./components/user/register";
+import AccountInfo from "./components/user/accountInfo";
+import SingleProduct from "./components/singleProductPage/SingleProduct";
 import { useSelector } from "react-redux";
-import CartIcon from "./components/CartIcon";
-import Cart from "./components/Cart";
+import CartIcon from "./components/cart/CartIcon";
+import Cart from "./components/cart/Cart";
 
 function App() {
   const darkMode = useSelector((state) => state.theme.darkTheme);
@@ -19,7 +19,7 @@ function App() {
     palette: {
       mode: darkMode ? "dark" : "light",
       primary: {
-        main: darkMode ? "#9c27b0" : "#1976d2",
+        main: darkMode ? "#1976d2" : "#1976d2",
       },
       background: {
         default: darkMode ? "#222" : "#fff",

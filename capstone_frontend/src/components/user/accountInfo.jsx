@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useGetUserQuery } from "../api/metalApi";
+import { useGetUserQuery } from "../../api/metalApi";
 
 const AccountInfo = () => {
   const userId = localStorage.getItem("userId");

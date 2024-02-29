@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetUsersQuery } from "../api/metalApi";
+import { useGetUsersQuery } from "../../api/metalApi";
 
 const GetAllUsers = () => {
   const { data, error, isLoading } = useGetUsersQuery();

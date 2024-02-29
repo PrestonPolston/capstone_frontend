@@ -4,7 +4,11 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const CartIcon = () => {
-  const cartItemsCount = useSelector((state) => state.cart.cartItems.length);
+  const cartItems = useSelector((state) => state.cart);
+  const cartItemsCount = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
   return (
     <div

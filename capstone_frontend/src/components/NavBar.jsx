@@ -14,7 +14,6 @@ import Drawer from "@mui/material/Drawer";
 import ListItem from "@mui/material/ListItem";
 import Switch from "@mui/material/Switch";
 import { Menu, MenuItem } from "@mui/material";
-import { Link as MUILink } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../slice/themeSlice";
 import { useLogoutUserMutation } from "../api/metalApi";
@@ -55,6 +54,7 @@ const NavBar = () => {
     try {
       const Id = localStorage.getItem("userId");
       await logoutUser({ Id });
+      handleClose();
       localStorage.removeItem("userId");
     } catch (error) {
       console.error("Error logging out:", error);

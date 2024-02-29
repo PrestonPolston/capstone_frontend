@@ -14,11 +14,9 @@ import {
   CardMedia,
   Typography,
   Button,
-  IconButton,
-  TextField,
+  Select,
+  MenuItem,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 
 const GetAllProducts = () => {
   const dispatch = useDispatch();
@@ -28,15 +26,8 @@ const GetAllProducts = () => {
     isLoading: productsLoading,
   } = useGetProductsQuery();
   const [userData, setUserData] = useState(null);
-  const userId = localStorage.getItem("userId");
-  const {
-    data: userResponse,
-    error: userError,
-    isLoading: userLoading,
-  } = useGetUserQuery(userId);
   const navigate = useNavigate();
   const [quantities, setQuantities] = useState({});
-  const [addCart] = useAddToCartMutation();
 
   useEffect(() => {
     if (productsData) {
@@ -47,12 +38,10 @@ const GetAllProducts = () => {
     }
   }, [productsData]);
 
-  const handleAddToCart = async (productId, quantity) => {
+  const handleAddToCart = (product, quantity) => {
     try {
-      console.log(userId);
-      const response = await addToCart({ userId, productId, quantity });
-      dispatch(addToCart(response.data));
-      console.log("Product added to cart successfully!");
+      dispatch(addToCart({ product, quantity }));
+      console.log(`${quantity}, ${product.name} added to cart successfully!`);
     } catch (error) {
       console.error("Error adding product to cart:", error);
     }
@@ -87,7 +76,7 @@ const GetAllProducts = () => {
               style={{
                 width: "45%",
                 margin: 10,
-                boxShadow: "0 4px 8px rgba(0, 0, 0, .6)",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, .8)",
               }}
             >
               <CardMedia
@@ -110,46 +99,26 @@ const GetAllProducts = () => {
                     justifyContent: "center",
                   }}
                 >
-                  <IconButton
-                    onClick={() =>
-                      updateQuantity(
-                        product.id,
-                        Math.max(1, quantities[product.id] - 1)
-                      )
-                    }
-                  >
-                    <RemoveIcon />
-                  </IconButton>
-                  <TextField
-                    type="number"
+                  <Select
                     value={quantities[product.id] || 1}
-                    onChange={(e) =>
-                      updateQuantity(
-                        product.id,
-                        Math.max(1, parseInt(e.target.value) || 1)
-                      )
-                    }
-                    InputProps={{
-                      inputProps: { min: 1 },
-                      style: { height: 30, width: 60 },
+                    onChange={(e) => updateQuantity(product.id, e.target.value)}
+                    style={{ margin: "10px 0", width: "75px", height: "30px" }}
+                    MenuProps={{
+                      PaperProps: { style: { maxHeight: 160, width: "auto" } },
                     }}
-                  />
-                  <IconButton
-                    onClick={() =>
-                      updateQuantity(
-                        product.id,
-                        quantities[product.id] ? quantities[product.id] + 1 : 2
-                      )
-                    }
                   >
-                    <AddIcon />
-                  </IconButton>
+                    {[...Array(product.quantity).keys()].map((value) => (
+                      <MenuItem key={value + 1} value={value + 1}>
+                        {value + 1}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </div>
                 <Button
                   variant="contained"
                   color="primary"
                   onClick={() =>
-                    handleAddToCart(product.id, quantities[product.id] || 1)
+                    handleAddToCart(product, quantities[product.id] || 1)
                   }
                 >
                   Add to Cart

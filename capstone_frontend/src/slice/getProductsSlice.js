@@ -3,15 +3,24 @@ import { metalApi } from "../api/metalApi";
 
 const productsSlice = createSlice({
   name: "products",
-  initialState: [],
+  initialState: {
+    productList: [], 
+    selectedProduct: null, 
+  },
+  reducers: {
+    selectProduct: (state, action) => {
+      state.selectedProduct = action.payload; 
+    },
+  },
   extraReducers: (builder) => {
     builder.addMatcher(
       metalApi.endpoints.getProducts.matchFulfilled,
       (state, { payload }) => {
-        return payload.results;
+        state.productList = payload.results;
       }
     );
   },
 });
 
-export default productsSlice;
+export const { selectProduct } = productsSlice.actions;
+export default productsSlice.reducer;

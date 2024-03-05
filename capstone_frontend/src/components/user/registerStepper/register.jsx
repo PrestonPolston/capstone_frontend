@@ -8,13 +8,11 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link } from "@mui/material";
-import { useRegisterUserMutation } from "../../api/metalApi";
+import { useRegisterUserMutation } from "../../../api/metalApi";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 
-export default function Register() {
-  const navigate = useNavigate();
+export default function Register({ handleNext }) {
   const [addNewUser] = useRegisterUserMutation();
   const [formData, setFormData] = useState({
     username: "",
@@ -35,8 +33,11 @@ export default function Register() {
     event.preventDefault();
     try {
       const response = await addNewUser(formData);
+
       if (response.status === 201 || 204) {
-        navigate("/login");
+        const userId = response.data.id;
+        localStorage.setItem("userId", userId);
+        handleNext();
       } else {
         setError("Registration unsuccessful. Please try again.");
       }

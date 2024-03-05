@@ -68,25 +68,25 @@ export const metalApi = createApi({
       query: (userId) => `/auth/users/${userId}/cart`,
     }),
     getUserPreferences: builder.query({
-      query: (userId) => `/api/users/${userId}/preferences`,
+      query: (userId) => `/auth/user/${userId}/preferences`,
     }),
     createUserPreferences: builder.mutation({
       query: ({ userId, preferencesData }) => ({
-        url: `/api/users/${userId}/preferences`,
+        url: `/auth/user/${userId}/preferences`,
         method: "POST",
         body: preferencesData,
       }),
     }),
     updateUserPreferences: builder.mutation({
       query: ({ userId, preferencesData }) => ({
-        url: `/api/users/${userId}/preferences`,
+        url: `/auth/user/${userId}/preferences`,
         method: "PUT",
         body: preferencesData,
       }),
     }),
     deleteUserPreferences: builder.mutation({
       query: (userId) => ({
-        url: `/api/users/${userId}/preferences`,
+        url: `/auth/user/${userId}/preferences`,
         method: "DELETE",
       }),
     }),
@@ -111,6 +111,30 @@ export const metalApi = createApi({
       query: ({ productId, reviewId }) => ({
         url: `/api/products/${productId}/reviews/${reviewId}`,
         method: "DELETE",
+      }),
+    }),
+    createOrder: builder.mutation({
+      query: (orderData) => ({
+        url: "/api/orders",
+        method: "POST",
+        body: orderData,
+      }),
+    }),
+    getUserInformation: builder.query({
+      query: ({ userId }) => `auth/user/${userId}/information`,
+    }),
+    createUserInformation: builder.mutation({
+      query: ({ userData, userId }) => ({
+        url: `auth/user/${userId}/information`,
+        method: "POST",
+        body: userData,
+      }),
+    }),
+    updateUserInformation: builder.mutation({
+      query: ({ userId, userData }) => ({
+        url: `auth/user/${userId}/information`,
+        method: "PUT",
+        body: userData,
       }),
     }),
   }),
@@ -138,4 +162,8 @@ export const {
   useCreateReviewMutation,
   useUpdateReviewMutation,
   useDeleteReviewMutation,
+  useCreateOrderMutation,
+  useGetUserInformationQuery,
+  useCreateUserInformationMutation,
+  useUpdateUserInformationMutation,
 } = metalApi;

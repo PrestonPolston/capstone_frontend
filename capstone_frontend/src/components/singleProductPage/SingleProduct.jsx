@@ -13,10 +13,13 @@ import {
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import InfoTab from "./TabSingleProduct";
+import { addToCart } from "../../slice/cartSlice";
+import { useDispatch } from "react-redux";
 
 const SingleProduct = () => {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const { id } = useParams();
+  const dispatch = useDispatch();
   const {
     data: productData,
     error: productError,
@@ -25,8 +28,30 @@ const SingleProduct = () => {
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
 
-  const handleAddToCart = (product) => {
-    console.log(`Added ${quantity} ${product.name} to cart`);
+  const handleAddToCart = (product, quantity) => {
+    try {
+      dispatch(addToCart({ product, quantity }));
+      console.log(`${quantity}, ${product.name} added to cart successfully!`);
+      setQuantity(1);
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+    }
+  };
+
+  const updateQuantity = (id, newQuantity) => {
+    const product = productsData.find((product) => product.id === id);
+    if (product && newQuantity <= product.quantity) {
+      setQuantities((prevQuantities) => ({
+        ...prevQuantities,
+        [id]: newQuantity,
+      }));
+    }
+  };
+
+  const handleQuantityChange = (newQuantity) => {
+    if (newQuantity <= productData.quantity) {
+      setQuantity(newQuantity);
+    }
   };
 
   return (
@@ -72,7 +97,7 @@ const SingleProduct = () => {
               <Select
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
-                style={{ margin: "10px 0" }}
+                style={{ margin: "10px 0", width: "75px", height: "40px" }}
               >
                 {[...Array(productData.quantity).keys()].map((value) => (
                   <MenuItem key={value + 1} value={value + 1}>
@@ -83,7 +108,7 @@ const SingleProduct = () => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => handleAddToCart(productData)}
+                onClick={() => handleAddToCart(productData, quantity)}
               >
                 Add to Cart
               </Button>

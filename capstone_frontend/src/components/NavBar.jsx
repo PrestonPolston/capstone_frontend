@@ -29,6 +29,11 @@ const NavBar = () => {
   const [logoutUser] = useLogoutUserMutation();
   const [id, setId] = useState(localStorage.getItem("userId"));
 
+  const userPreferences = useSelector(
+    (state) => state.userPreferences.preferences
+  );
+  const profilePic = userPreferences?.profilePic;
+
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
@@ -106,7 +111,15 @@ const NavBar = () => {
               aria-label="account of current user"
               onClick={handleClick}
             >
-              <AccountCircle />
+              {profilePic ? ( // Display profile picture if available
+                <img
+                  src={profilePic}
+                  alt="Profile"
+                  style={{ borderRadius: "50%", width: 40, height: 40 }}
+                />
+              ) : (
+                <AccountCircle />
+              )}
             </IconButton>
           ) : (
             <div>

@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { decodeBase64Image } from "../../app/encode_decode";
 import { useNavigate } from "react-router-dom";
 import { removeFromCart } from "../../slice/cartSlice";
-import { updateQuantity } from "../../slice/cartSlice";
+import { setCartItems } from "../../slice/cartSlice";
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart);
@@ -25,20 +25,35 @@ const Cart = () => {
   };
 
   const handleRemoveFromCart = (itemId) => {
-    console.log(itemId);
     dispatch(removeFromCart({ id: itemId }));
   };
 
   const [quantities, setQuantities] = useState({});
 
-  const handleQuantityChange = (itemId, quantityStr) => {
-    const quantity = parseInt(quantityStr, 10);
-    dispatch(updateQuantity({ id: itemId, quantity: quantity }));
+  const handleQuantityChange = (itemId, quantity) => {
+    const updatedCartItems = cartItems.map((item) => {
+      if (item.product.id === itemId) {
+        return { ...item, quantity };
+      }
+      return item;
+    });
+
+    dispatch(setCartItems(updatedCartItems));
+  };
+
+  const handleCheckout = () => {
+    navigate("/checkout");
   };
 
   useEffect(() => {
-    console.log("Cart items updated:", cartItems);
+    const initialQuantities = {};
+    cartItems.forEach((item) => {
+      initialQuantities[item.product.id] = item.quantity;
+    });
+    setQuantities(initialQuantities);
   }, [cartItems]);
+
+  useEffect(() => {}, [cartItems]);
 
   return (
     <div>
@@ -54,7 +69,14 @@ const Cart = () => {
         <Typography variant="h4" style={{ margin: "0 auto" }}>
           Your Cart
         </Typography>
-
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ padding: "" }}
+          onClick={handleCheckout}
+        >
+          Checkout
+        </Button>
         <Button variant="contained" color="primary" onClick={handleBack}>
           Back
         </Button>
@@ -89,13 +111,13 @@ const Cart = () => {
                 </Typography>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <Select
-                    value={quantities[item.product.id] || 1}
+                    value={quantities[item.product.id] || item.quantity}
                     onChange={(e) =>
                       handleQuantityChange(item.product.id, e.target.value)
                     }
-                    style={{ margin: "10px 0" }}
+                    style={{ margin: "10px 0", width: "75px", height: "40px" }}
                   >
-                    {[...Array(10).keys()].map((value) => (
+                    {[...Array(item.product.quantity).keys()].map((value) => (
                       <MenuItem key={value + 1} value={value + 1}>
                         {value + 1}
                       </MenuItem>

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -13,6 +14,11 @@ import { useGetProductsQuery } from "../../api/metalApi";
 
 const RelatedProducts = () => {
   const { data: products, isLoading, error } = useGetProductsQuery();
+  const navigate = useNavigate();
+
+  const handleMoreDetails = (productId) => {
+    navigate(`/product/${productId}`);
+  };
 
   useEffect(() => {
     if (products) {
@@ -50,7 +56,11 @@ const RelatedProducts = () => {
               Price: ${product.price}
             </Typography>
             <div style={{ marginLeft: "auto" }}>
-              <Button variant="contained" color="primary">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleMoreDetails(product.id)}
+              >
                 More Details
               </Button>
             </div>

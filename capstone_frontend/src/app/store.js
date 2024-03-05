@@ -4,6 +4,7 @@ import productsSlice from "../slice/getProductsSlice";
 import getUserSlice from "../slice/getUserSlice";
 import themeSlice from "../slice/themeSlice";
 import cartSlice from "../slice/cartSlice";
+import userPreferencesSlice from "../slice/userPreferencesSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     user: getUserSlice,
     theme: themeSlice,
     cart: cartSlice,
+    userPreferences: userPreferencesSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(metalApi.middleware),

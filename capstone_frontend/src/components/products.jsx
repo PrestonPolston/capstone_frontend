@@ -4,10 +4,12 @@ import {
   useGetProductsQuery,
   useGetUserQuery,
   useAddToCartMutation,
+  useGetUserPreferencesQuery,
 } from "../api/metalApi";
 import { decodeBase64Image } from "../app/encode_decode";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../slice/cartSlice";
+import { setUserPreferences } from "../slice/userPreferencesSlice";
 import {
   Card,
   CardContent,
@@ -20,16 +22,26 @@ import {
 
 const GetAllProducts = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [quantities, setQuantities] = useState({});
   const {
     data: productsData,
     error: productsError,
     isLoading: productsLoading,
   } = useGetProductsQuery();
-  const [userData, setUserData] = useState(null);
-  const navigate = useNavigate();
-  const [quantities, setQuantities] = useState({});
+
+  const userId = localStorage.getItem("userId");
+
+  const {
+    data: userPreferences,
+    isLoading: preferencesLoading,
+    isError: preferencesError,
+  } = useGetUserPreferencesQuery(userId);
 
   useEffect(() => {
+    if (userPreferences) {
+      dispatch(setUserPreferences(userPreferences));
+    }
     if (productsData) {
       const initialQuantities = Object.fromEntries(
         productsData.map((product) => [product.id, 1])

@@ -1,18 +1,9 @@
-import { useGetUserQuery } from "../../../api/metalApi";
 import { useGetUserPreferencesQuery } from "../../../api/metalApi";
 import { Grid, Card, CardContent } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const AccountInfo = () => {
-  const userData = useSelector((state) => state.user);
-
-  const {
-    data: fetchedUserPreferences,
-    isLoading: loadingUserPreferences,
-    isError: errorUserPreferences,
-  } = useGetUserPreferencesQuery(userData.id);
-
   const cardContainerStyle = {
     display: "flex",
     justifyContent: "center",
@@ -22,12 +13,12 @@ const AccountInfo = () => {
   };
 
   const cardStyle = {
-    flex: "0 0 33.33%", // Set each card to occupy 33.33% of the container width
+    flex: "0 0 33.33%",
     cursor: "pointer",
     overflow: "hidden",
     minWidth: 150,
-    maxWidth: "33.33%", // Limit maximum width for responsiveness
-    margin: 0, // Remove margins
+    maxWidth: "33.33%",
+    margin: 0,
   };
 
   const cardContentStyle = {
@@ -69,7 +60,7 @@ const AccountInfo = () => {
           </Link>
         </Grid>
         <Grid item xs={4}>
-          <Link to="/userpreferences" style={{ textDecoration: "none" }}>
+          <Link to="/editpreferences" style={{ textDecoration: "none" }}>
             <Card>
               <CardContent>
                 <h2>User Preferences</h2>

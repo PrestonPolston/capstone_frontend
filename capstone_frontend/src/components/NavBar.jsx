@@ -31,8 +31,9 @@ const NavBar = () => {
   const [id, setId] = useState(localStorage.getItem("userId"));
 
   const userPreferences = useSelector(
-    (state) => state.userPreferences.preferences
+    (state) => state.userPreferences.userPreferences
   );
+
   const profilePic = userPreferences?.profilePic;
 
   const toggleMenu = () => {
@@ -149,6 +150,30 @@ const NavBar = () => {
           <ListItem button onClick={toggleMenu}>
             <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
               Products
+            </Link>
+          </ListItem>
+          <ListItem button onClick={toggleMenu}>
+            <Link
+              to="/userInfo"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              User Info
+            </Link>
+          </ListItem>
+          <ListItem button onClick={toggleMenu}>
+            <Link
+              to="/updateLogin"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              Update Login Info
+            </Link>
+          </ListItem>
+          <ListItem button onClick={toggleMenu}>
+            <Link
+              to="/editpreferences"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              Edit Preferences
             </Link>
           </ListItem>
         </List>

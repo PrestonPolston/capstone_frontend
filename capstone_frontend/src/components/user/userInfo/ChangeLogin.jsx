@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -7,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useUpdateUserMutation, useGetUserQuery } from "../../../api/metalApi";
+import { useUpdateUserMutation } from "../../../api/metalApi";
 
 const UpdateUser = () => {
   const userLoginInfo = useSelector((state) => state.user);
@@ -26,6 +25,8 @@ const UpdateUser = () => {
 
   const [userData, setUserData] = useState(initialUserData);
   const navigate = useNavigate();
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,24 +40,30 @@ const UpdateUser = () => {
     e.preventDefault();
 
     if (userData.password !== userData.confirmPassword) {
-      console.log(
+      setErrorAlert(
         "Passwords do not match. Please re-enter matching passwords."
       );
+      setSuccessAlert("");
       return;
     }
-    if (userLoginInfo.id === undefined) {
+
+    if (userId === undefined) {
+      return;
     }
 
     const updatedData = { ...userData };
     delete updatedData.confirmPassword;
 
     try {
-      console.log(updatedData);
-      const response = await updateUser({
-        userId: userId,
-        userData: updatedData,
-      });
-      console.log("User data updated successfully:", response);
+      const response = await updateUser({ userId, userData: updatedData });
+
+      setSuccessAlert("User data updated successfully!");
+      setErrorAlert("");
+
+      setTimeout(() => {
+        setSuccessAlert("");
+        navigate(-1);
+      }, 2000);
     } catch (error) {
       console.error("Error updating user data:", error);
     }
@@ -129,6 +136,9 @@ const UpdateUser = () => {
               Back
             </Button>
           </div>
+
+          {errorAlert && <p style={{ color: "red" }}>{errorAlert}</p>}
+          {successAlert && <p style={{ color: "green" }}>{successAlert}</p>}
         </CardContent>
       </Card>
     </div>

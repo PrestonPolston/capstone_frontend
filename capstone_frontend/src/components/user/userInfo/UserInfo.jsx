@@ -1,53 +1,37 @@
-import { useGetUserInformationQuery } from "../../../api/metalApi";
-import { useGetUserQuery } from "../../../api/metalApi";
+import { useSelector, useDispatch } from "react-redux";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import Avatar from "@mui/material/Avatar";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { decodeBase64Image } from "../../../app/encode_decode";
-import { useDispatch } from "react-redux";
 import { setUser } from "../../../slice/getUserSlice";
 
 const UserInfo = () => {
   const dispatch = useDispatch();
+  const fetchedUserData = useSelector((state) => state.user);
+  const fetchedUserInfo = useSelector((state) => state.userInfo);
   const userPreferences = useSelector(
-    (state) => state.userPreferences.preferences
+    (state) => state.userPreferences.userPreferences
   );
-  const profilePic = userPreferences?.profilePic;
-  const navigate = useNavigate();
-  const userId = localStorage.getItem("userId");
-  const {
-    data: fetchedUserData,
-    isLoading: userLoading,
-    isError: userError,
-  } = useGetUserQuery(userId);
-  dispatch(setUser(fetchedUserData));
-  const {
-    data: fetchedUserInfo,
-    isLoading: infoLoading,
-    isError: infoError,
-  } = useGetUserInformationQuery(userId);
 
-  if (userLoading || infoLoading) return <p>Loading user information...</p>;
-  if (userError || infoError) return <p>Error fetching user information</p>;
-
-  const userName = fetchedUserData?.username || "N/A";
-  const fullName = `${fetchedUserData?.firstName || ""} ${
-    fetchedUserData?.lastName || ""
-  }`;
-  const email = fetchedUserData?.email || "N/A";
-  const address = fetchedUserInfo?.address || "N/A";
-  const state = fetchedUserInfo?.state || "N/A";
-  const city = fetchedUserInfo?.city || "N/A";
-  const postalCode = fetchedUserInfo?.postalCode || "N/A";
-  const country = fetchedUserInfo?.country || "N/A";
-
-  const decodedProfilePic = profilePic
-    ? decodeBase64Image(profilePic)
+  const decodedProfilePic = userPreferences?.profilePic
+    ? decodeBase64Image(userPreferences.profilePic)
     : AccountCircle;
+
+  const navigate = useNavigate();
+
+  const userName = fetchedUserData.username || "N/A";
+  const fullName = `${fetchedUserData.firstName || ""} ${
+    fetchedUserData.lastName || ""
+  }`;
+  const email = fetchedUserData.email || "N/A";
+  const address = fetchedUserInfo.address || "N/A";
+  const state = fetchedUserInfo.state || "N/A";
+  const city = fetchedUserInfo.city || "N/A";
+  const postalCode = fetchedUserInfo.postalCode || "N/A";
+  const country = fetchedUserInfo.country || "N/A";
 
   const cardContainerStyle = {
     display: "flex",
@@ -67,7 +51,7 @@ const UserInfo = () => {
     width: 150,
     height: 150,
     margin: "0 auto",
-    marginBottom: "10px", // Adjust the margin bottom for spacing
+    marginBottom: "10px",
   };
 
   const handleBack = () => {

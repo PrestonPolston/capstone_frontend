@@ -4,6 +4,7 @@ import {
   useGetProductsQuery,
   useGetUserQuery,
   useAddToCartMutation,
+  useGetUserInformationQuery,
   useGetUserPreferencesQuery,
 } from "../api/metalApi";
 import { decodeBase64Image } from "../app/encode_decode";
@@ -32,6 +33,11 @@ const GetAllProducts = () => {
   } = useGetProductsQuery();
 
   const userId = localStorage.getItem("userId");
+  const {
+    data: userInformation,
+    isLoading: loadingUserInformation,
+    isError: ErrorUserInformation,
+  } = useGetUserInformationQuery(userId);
   const { data: user, isLoading, isError } = useGetUserQuery(userId);
   dispatch(setUser(user));
   const {

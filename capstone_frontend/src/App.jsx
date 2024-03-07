@@ -15,11 +15,12 @@ import Cart from "./components/cart/Cart";
 import Checkout from "./components/cart/checkout/Checkout";
 import UserInfo from "./components/user/userInfo/UserInfo";
 import UpdateUser from "./components/user/userInfo/ChangeLogin";
+import EditUserPreferences from "./components/user/userInfo/UserPreferences";
 
 function App() {
   const darkMode = useSelector((state) => state.theme.darkTheme);
   const userPreferences = useSelector(
-    (state) => state.userPreferences.preferences
+    (state) => state.userPreferences.userPreferences
   );
 
   const theme = createTheme({
@@ -63,6 +64,7 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/userInfo" element={<UserInfo />} />
           <Route path="/updateLogin" element={<UpdateUser />} />
+          <Route path="/editpreferences" element={<EditUserPreferences />} />
         </Routes>
         <CartIcon />
       </div>

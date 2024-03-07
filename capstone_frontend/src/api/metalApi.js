@@ -8,6 +8,13 @@ export const metalApi = createApi({
   endpoints: (builder) => ({
     getUsers: builder.query({ query: () => "/auth/user" }),
     getUser: builder.query({ query: (id) => `/auth/user/${id}` }),
+    updateUser: builder.mutation({
+      query: ({ userId, userData }) => ({
+        url: `auth/user/${userId}`,
+        method: "PUT",
+        body: userData,
+      }),
+    }),
     registerUser: builder.mutation({
       query: (userData) => ({
         url: "/auth/user/register",
@@ -143,6 +150,7 @@ export const metalApi = createApi({
 export const {
   useGetUsersQuery,
   useGetUserQuery,
+  useUpdateUserMutation,
   useRegisterUserMutation,
   useLoginUserMutation,
   useLogoutUserMutation,

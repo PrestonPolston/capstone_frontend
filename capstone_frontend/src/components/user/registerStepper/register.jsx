@@ -36,6 +36,7 @@ export default function Register({ handleNext }) {
 
       if (response.status === 201 || 204) {
         const userId = response.data.id;
+        console.log(userId);
         localStorage.setItem("userId", userId);
         handleNext();
       } else {

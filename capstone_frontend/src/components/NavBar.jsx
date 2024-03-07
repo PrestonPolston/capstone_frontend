@@ -17,6 +17,7 @@ import { Menu, MenuItem } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../slice/themeSlice";
 import { useLogoutUserMutation } from "../api/metalApi";
+import { decodeBase64Image } from "../app/encode_decode";
 
 const NavBar = () => {
   const location = useLocation();
@@ -111,9 +112,9 @@ const NavBar = () => {
               aria-label="account of current user"
               onClick={handleClick}
             >
-              {profilePic ? ( // Display profile picture if available
+              {profilePic ? (
                 <img
-                  src={profilePic}
+                  src={decodeBase64Image(profilePic)}
                   alt="Profile"
                   style={{ borderRadius: "50%", width: 40, height: 40 }}
                 />

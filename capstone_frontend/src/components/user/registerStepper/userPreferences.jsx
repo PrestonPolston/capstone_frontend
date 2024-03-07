@@ -9,66 +9,149 @@ import {
 } from "@mui/material";
 import { useCreateUserPreferencesMutation } from "../../../api/metalApi";
 import { encodeImageToBase64 } from "../../../app/encode_decode";
+import Slider from "@mui/material/Slider";
+import Grid from "@mui/material/Grid";
 import {
   amber,
+  indigo,
   blue,
+  lightBlue,
+  cyan,
   green,
+  lightGreen,
+  lime,
+  yellow,
   red,
   teal,
   deepPurple,
   grey,
   pink,
-  lime,
   orange,
+  deepOrange,
+  brown,
+  blueGrey,
 } from "@mui/material/colors";
 
-const colorOptions = [
-  { color: amber[500], label: "Amber" },
-  { color: blue[500], label: "Blue" },
-  { color: green[500], label: "Green" },
-  { color: red[500], label: "Red" },
-  { color: teal[500], label: "Teal" },
-  { color: deepPurple[500], label: "Purple" },
-  { color: grey[500], label: "Grey" },
-  { color: pink[500], label: "Pink" },
-  { color: lime[500], label: "Lime" },
-  { color: orange[500], label: "Orange" },
-];
-
 const UserPreferences = ({ handleNext }) => {
+  const [primaryColor, setPrimaryColor] = useState(blue);
+  const [primaryShade, setPrimaryShade] = useState(500);
+  const [secondaryColor, setSecondaryColor] = useState(blue);
+  const [secondaryShade, setSecondaryShade] = useState(500);
+
+  const primaryColorOptions = [
+    { color: amber[primaryShade], label: "Amber", key: "amber" },
+    { color: indigo[primaryShade], label: "Indigo", key: "indigo" },
+    { color: blue[primaryShade], label: "Blue", key: "blue" },
+    { color: lightBlue[primaryShade], label: "Light Blue", key: "lightBlue" },
+    { color: cyan[primaryShade], label: "Cyan", key: "cyan" },
+    { color: green[primaryShade], label: "Green", key: "green" },
+    {
+      color: lightGreen[primaryShade],
+      label: "Light Green",
+      key: "lightGreen",
+    },
+    { color: lime[primaryShade], label: "Lime", key: "lime" },
+    { color: yellow[primaryShade], label: "Yellow", key: "yellow" },
+    { color: red[primaryShade], label: "Red", key: "red" },
+    { color: teal[primaryShade], label: "Teal", key: "teal" },
+    {
+      color: deepPurple[primaryShade],
+      label: "Deep Purple",
+      key: "deepPurple",
+    },
+    { color: grey[primaryShade], label: "Grey", key: "grey" },
+    { color: pink[primaryShade], label: "Pink", key: "pink" },
+    { color: orange[primaryShade], label: "Orange", key: "orange" },
+    {
+      color: deepOrange[primaryShade],
+      label: "Deep Orange",
+      key: "deepOrange",
+    },
+    { color: brown[primaryShade], label: "Brown", key: "brown" },
+    { color: blueGrey[primaryShade], label: "Blue Grey", key: "blueGrey" },
+  ];
+
+  const secondaryColorOptions = [
+    { color: amber[secondaryShade], label: "Amber", key: "amber" },
+    { color: indigo[secondaryShade], label: "Indigo", key: "indigo" },
+    { color: blue[secondaryShade], label: "Blue", key: "blue" },
+    { color: lightBlue[secondaryShade], label: "Light Blue", key: "lightBlue" },
+    { color: cyan[secondaryShade], label: "Cyan", key: "cyan" },
+    { color: green[secondaryShade], label: "Green", key: "green" },
+    {
+      color: lightGreen[secondaryShade],
+      label: "Light Green",
+      key: "lightGreen",
+    },
+    { color: lime[secondaryShade], label: "Lime", key: "lime" },
+    { color: yellow[secondaryShade], label: "Yellow", key: "yellow" },
+    { color: red[secondaryShade], label: "Red", key: "red" },
+    { color: teal[secondaryShade], label: "Teal", key: "teal" },
+    {
+      color: deepPurple[secondaryShade],
+      label: "Deep Purple",
+      key: "deepPurple",
+    },
+    { color: grey[secondaryShade], label: "Grey", key: "grey" },
+    { color: pink[secondaryShade], label: "Pink", key: "pink" },
+    { color: orange[secondaryShade], label: "Orange", key: "orange" },
+    {
+      color: deepOrange[secondaryShade],
+      label: "Deep Orange",
+      key: "deepOrange",
+    },
+    { color: brown[secondaryShade], label: "Brown", key: "brown" },
+    { color: blueGrey[secondaryShade], label: "Blue Grey", key: "blueGrey" },
+  ];
+
   const [preferencesData, setPreferencesData] = useState({
     profilePic: "",
     primaryColor: amber[500],
     secondaryColor: blue[500],
   });
 
+  const handlePrimaryColorChange = (color) => {
+    setPrimaryColor(color);
+  };
+  const handleSecondaryColorChange = (color) => {
+    setSecondaryColor(color);
+  };
+  const handlePrimaryShadeChange = (event, newValue) => {
+    setPrimaryShade(newValue);
+  };
+  const handleSecondaryShadeChange = (event, newValue) => {
+    setSecondaryShade(newValue);
+  };
+
   const [createPreferences, { isLoading, isError }] =
     useCreateUserPreferencesMutation();
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setPreferencesData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      encodeImageToBase64(file);
+      const base64Image = await encodeImageToBase64(file);
       setPreferencesData((prevData) => ({
         ...prevData,
-        profilePic: file.name,
+        profilePic: base64Image,
       }));
     }
   };
 
   const handleSavePreferences = async () => {
     try {
-      await createPreferences({
+      const { response } = await createPreferences({
         userId: localStorage.getItem("userId"),
-        preferencesData,
+        preferencesData: {
+          primaryColor: primaryColor,
+          secondaryColor: secondaryColor,
+          profilePic: preferencesData.profilePic,
+        },
       });
-      localStorage.removeItem("userId");
-      handleNext();
+      if (response) {
+        console.log(response);
+        localStorage.removeItem("userId");
+        handleNext();
+      }
     } catch (error) {
       console.error("Error saving user preferences:", error);
     }
@@ -87,51 +170,57 @@ const UserPreferences = ({ handleNext }) => {
             InputLabelProps={{ shrink: true }}
             onChange={handleFileChange}
           />
-          <Box mt={2}>
-            <TextField
-              fullWidth
-              name="primaryColor"
-              label="Primary Color"
-              value={preferencesData.primaryColor}
-              onChange={handleChange}
-              select
-            >
-              {colorOptions.map((option) => (
-                <MenuItem
-                  key={option.color}
-                  value={option.color}
-                  sx={{ backgroundColor: option.color }}
-                >
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Box>
-          <Box mt={2}>
-            <TextField
-              fullWidth
-              name="secondaryColor"
-              label="Secondary Color"
-              value={preferencesData.secondaryColor}
-              onChange={handleChange}
-              select
-            >
-              {colorOptions.map((option) => (
-                <MenuItem
-                  key={option.color}
-                  value={option.color}
-                  sx={{ backgroundColor: option.color }}
-                >
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Box>
+          <h3>Primary Color Selection:</h3>
+          <Button
+            variant="contained"
+            sx={{ backgroundColor: primaryColor, width: 50, height: 50 }}
+          />
+          <Slider
+            value={primaryShade}
+            min={100}
+            max={900}
+            step={100}
+            onChange={handlePrimaryShadeChange}
+          />
+          <Grid container spacing={0}>
+            {primaryColorOptions.map((option) => (
+              <Grid item key={option.key}>
+                <Button
+                  variant="contained"
+                  sx={{ backgroundColor: option.color, width: 50, height: 50 }}
+                  onClick={() => handlePrimaryColorChange(option.color)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          <h3>Secondary Color Selection:</h3>
+          <Button
+            variant="contained"
+            sx={{ backgroundColor: secondaryColor, width: 50, height: 50 }}
+          />
+          <Slider
+            value={secondaryShade}
+            min={100}
+            max={900}
+            step={100}
+            onChange={handleSecondaryShadeChange}
+          />
+          <Grid container spacing={0}>
+            {secondaryColorOptions.map((option) => (
+              <Grid item key={option.key}>
+                <Button
+                  variant="contained"
+                  sx={{ backgroundColor: option.color, width: 50, height: 50 }}
+                  onClick={() => handleSecondaryColorChange(option.color)}
+                />
+              </Grid>
+            ))}
+          </Grid>
           <Button
             variant="contained"
             onClick={handleSavePreferences}
             disabled={isLoading}
-            mt={2}
+            mt={5}
           >
             Save Preferences
           </Button>

@@ -10,6 +10,7 @@ import { decodeBase64Image } from "../app/encode_decode";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../slice/cartSlice";
 import { setUserPreferences } from "../slice/userPreferencesSlice";
+import { setUser } from "../slice/getUserSlice";
 import {
   Card,
   CardContent,
@@ -31,7 +32,8 @@ const GetAllProducts = () => {
   } = useGetProductsQuery();
 
   const userId = localStorage.getItem("userId");
-
+  const { data: user, isLoading, isError } = useGetUserQuery(userId);
+  dispatch(setUser(user));
   const {
     data: userPreferences,
     isLoading: preferencesLoading,

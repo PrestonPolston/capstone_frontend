@@ -4,7 +4,11 @@ import { metalApi } from "../api/metalApi";
 const getUserSlice = createSlice({
   name: "user",
   initialState: {},
-  reducers: {},
+  reducers: {
+    setUser(state, action) {
+      return action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addMatcher(
       metalApi.endpoints.getUser.matchFulfilled,
@@ -17,5 +21,7 @@ const getUserSlice = createSlice({
     );
   },
 });
+
+export const { setUser } = getUserSlice.actions;
 
 export default getUserSlice.reducer;

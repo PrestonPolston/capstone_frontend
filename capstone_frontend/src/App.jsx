@@ -6,14 +6,15 @@ import GetAllUsers from "./components/user/GetUser";
 import Login from "./components/user/login";
 import NavBar from "./components/NavBar";
 import Register from "./components/user/registerStepper/register";
-import AccountInfo from "./components/user/accountInfo";
+import AccountInfo from "./components/user/userInfo/AccountHome";
 import SingleProduct from "./components/singleProductPage/SingleProduct";
 import UserStepper from "./components/user/registerStepper/UserStepper";
 import { useSelector } from "react-redux";
 import CartIcon from "./components/cart/CartIcon";
 import Cart from "./components/cart/Cart";
 import Checkout from "./components/cart/checkout/Checkout";
-import { setUserPreferences } from "./slice/userPreferencesSlice"; // Import the action to set user preferences
+import UserInfo from "./components/user/userInfo/UserInfo";
+import UpdateUser from "./components/user/userInfo/ChangeLogin";
 
 function App() {
   const darkMode = useSelector((state) => state.theme.darkTheme);
@@ -60,6 +61,8 @@ function App() {
           <Route path="/accountInfo" element={<AccountInfo />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/userInfo" element={<UserInfo />} />
+          <Route path="/updateLogin" element={<UpdateUser />} />
         </Routes>
         <CartIcon />
       </div>

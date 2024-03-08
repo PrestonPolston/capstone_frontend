@@ -32,10 +32,10 @@ import {
   blueGrey,
 } from "@mui/material/colors";
 
-const UserPreferences = ({ handleNext }) => {
-  const [primaryColor, setPrimaryColor] = useState(blue);
+const UserPreferences = ({ handleNext, handleFinish }) => {
+  const [primaryColor, setPrimaryColor] = useState(null);
   const [primaryShade, setPrimaryShade] = useState(500);
-  const [secondaryColor, setSecondaryColor] = useState(blue);
+  const [secondaryColor, setSecondaryColor] = useState(null);
   const [secondaryShade, setSecondaryShade] = useState(500);
 
   const primaryColorOptions = [
@@ -106,16 +106,18 @@ const UserPreferences = ({ handleNext }) => {
 
   const [preferencesData, setPreferencesData] = useState({
     profilePic: "",
-    primaryColor: amber[500],
-    secondaryColor: blue[500],
+    primaryColor: null,
+    secondaryColor: null,
   });
 
   const handlePrimaryColorChange = (color) => {
-    setPrimaryColor(color);
+    setPrimaryColor((prevColor) => (prevColor === color ? null : color));
   };
+
   const handleSecondaryColorChange = (color) => {
-    setSecondaryColor(color);
+    setSecondaryColor((prevColor) => (prevColor === color ? null : color));
   };
+
   const handlePrimaryShadeChange = (event, newValue) => {
     setPrimaryShade(newValue);
   };
@@ -136,21 +138,24 @@ const UserPreferences = ({ handleNext }) => {
       }));
     }
   };
-
   const handleSavePreferences = async () => {
+    const primaryColorToSave = primaryColor || null;
+    const secondaryColorToSave = secondaryColor || null;
+
     try {
-      const { response } = await createPreferences({
+      const response = await createPreferences({
         userId: localStorage.getItem("userId"),
         preferencesData: {
-          primaryColor: primaryColor,
-          secondaryColor: secondaryColor,
-          profilePic: preferencesData.profilePic,
+          primaryColor: primaryColorToSave,
+          secondaryColor: secondaryColorToSave,
+          profilePic: preferencesData.profilePic || null,
         },
       });
+
       if (response) {
         console.log(response);
         localStorage.removeItem("userId");
-        handleNext();
+        handleFinish();
       }
     } catch (error) {
       console.error("Error saving user preferences:", error);

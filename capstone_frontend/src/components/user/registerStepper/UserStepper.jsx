@@ -72,7 +72,7 @@ const UserStepper = () => {
           </UserAddress>
         )}
         {activeStep === 2 && (
-          <UserPreferences handleNext={handleFinish}>
+          <UserPreferences handleNext={handleNext} handleFinish={handleFinish}>
             <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
               <Button
                 disabled={activeStep === 0}

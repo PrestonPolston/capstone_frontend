@@ -33,7 +33,7 @@ export default function Login() {
 
         localStorage.setItem("userId", userId);
 
-        navigate("/");
+        navigate("/fetch-user-data");
       } else {
         console.error("Failed to fetch user data.");
       }

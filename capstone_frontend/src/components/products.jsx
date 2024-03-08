@@ -1,17 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  useGetProductsQuery,
-  useGetUserQuery,
-  useAddToCartMutation,
-  useGetUserInformationQuery,
-  useGetUserPreferencesQuery,
-} from "../api/metalApi";
+import { useGetProductsQuery } from "../api/metalApi";
 import { decodeBase64Image } from "../app/encode_decode";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../slice/cartSlice";
-import { setUserPreferences } from "../slice/userPreferencesSlice";
-import { setUser } from "../slice/getUserSlice";
 import {
   Card,
   CardContent,
@@ -26,37 +18,7 @@ const GetAllProducts = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [quantities, setQuantities] = useState({});
-  const {
-    data: productsData,
-    error: productsError,
-    isLoading: productsLoading,
-  } = useGetProductsQuery();
-
-  const userId = localStorage.getItem("userId");
-  const {
-    data: userInformation,
-    isLoading: loadingUserInformation,
-    isError: ErrorUserInformation,
-  } = useGetUserInformationQuery(userId);
-  const { data: user, isLoading, isError } = useGetUserQuery(userId);
-  dispatch(setUser(user));
-  const {
-    data: userPreferences,
-    isLoading: preferencesLoading,
-    isError: preferencesError,
-  } = useGetUserPreferencesQuery(userId);
-
-  useEffect(() => {
-    if (userPreferences) {
-      dispatch(setUserPreferences(userPreferences));
-    }
-    if (productsData) {
-      const initialQuantities = Object.fromEntries(
-        productsData.map((product) => [product.id, 1])
-      );
-      setQuantities(initialQuantities);
-    }
-  }, [productsData]);
+  const { data: productsData } = useGetProductsQuery();
 
   const handleAddToCart = (product, quantity) => {
     try {

@@ -4,18 +4,18 @@ import { metalApi } from "../api/metalApi";
 const getUserInfoSlice = createSlice({
   name: "userInfo",
   initialState: {
-    user: {},
+    userInfo: {},
   },
   reducers: {
     setUserInfo: (state, action) => {
-      state.user = action.payload;
+      state.userInfo = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
       metalApi.endpoints.getUserInformation.matchFulfilled,
       (state, action) => {
-        state.user = action.payload;
+        state.userInfo = action.payload;
       }
     );
   },

@@ -5,7 +5,6 @@ import GetAllProducts from "./components/products";
 import GetAllUsers from "./components/user/GetUser";
 import Login from "./components/user/login";
 import NavBar from "./components/NavBar";
-import Register from "./components/user/registerStepper/register";
 import AccountInfo from "./components/user/userInfo/AccountHome";
 import SingleProduct from "./components/singleProductPage/SingleProduct";
 import UserStepper from "./components/user/registerStepper/UserStepper";
@@ -16,6 +15,7 @@ import Checkout from "./components/cart/checkout/Checkout";
 import UserInfo from "./components/user/userInfo/UserInfo";
 import UpdateUser from "./components/user/userInfo/ChangeLogin";
 import EditUserPreferences from "./components/user/userInfo/UserPreferences";
+import FetchUserDataPage from "./components/FetchUserData";
 
 function App() {
   const darkMode = useSelector((state) => state.theme.darkTheme);
@@ -65,6 +65,7 @@ function App() {
           <Route path="/userInfo" element={<UserInfo />} />
           <Route path="/updateLogin" element={<UpdateUser />} />
           <Route path="/editpreferences" element={<EditUserPreferences />} />
+          \<Route path="/fetch-user-data" element={<FetchUserDataPage />} />
         </Routes>
         <CartIcon />
       </div>

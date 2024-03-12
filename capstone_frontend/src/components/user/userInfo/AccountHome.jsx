@@ -69,7 +69,7 @@ const AccountInfo = () => {
           </Link>
         </Grid>
         <Grid item xs={4}>
-          <Link to="/blank" style={{ textDecoration: "none" }}>
+          <Link to="/getUserReview" style={{ textDecoration: "none" }}>
             <Card>
               <CardContent>
                 <h2>Reviews</h2>
@@ -78,7 +78,7 @@ const AccountInfo = () => {
           </Link>
         </Grid>
         <Grid item xs={4}>
-          <Link to="/blank" style={{ textDecoration: "none" }}>
+          <Link to="/getUserOrders" style={{ textDecoration: "none" }}>
             <Card>
               <CardContent>
                 <h2>Orders</h2>

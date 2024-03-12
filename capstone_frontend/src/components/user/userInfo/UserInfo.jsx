@@ -93,9 +93,9 @@ const UserInfo = () => {
   const handleInfoEditSubmit = async () => {
     try {
       console.log("Data to be sent for updating:", editingUserInfo);
-
+      const userId = fetchedUserData.id;
       const response = await updateUserInfo({
-        userId: fetchedUserData.id,
+        userId,
         userInfo: {
           address: editingUserInfo.address,
           state: editingUserInfo.state,
@@ -104,8 +104,8 @@ const UserInfo = () => {
           country: editingUserInfo.country,
         },
       });
-      console.log("response:", response);
-      //   dispatch(setUserInfo(response));
+      console.log(response);
+      dispatch(setUserInfo(response.data));
       setInfoDialogOpen(false);
     } catch (error) {
       console.error("Error updating user information:", error);
@@ -177,8 +177,8 @@ const UserInfo = () => {
           >
             <EditIcon />
           </IconButton>
-          <Button variant="contained" onClick={handleEditInfo}>
-            Edit Address
+          <Button variant="contained" onClick={handleBack}>
+            Back
           </Button>
         </div>
 
@@ -276,7 +276,6 @@ const UserInfo = () => {
             <Button variant="contained" onClick={handleInfoEditSubmit}>
               Submit
             </Button>
-            <Button onClick={handleBack}>Back</Button>
           </DialogContent>
         </Dialog>
       </Card>

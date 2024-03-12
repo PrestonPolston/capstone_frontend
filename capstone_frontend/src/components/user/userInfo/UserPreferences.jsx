@@ -40,14 +40,28 @@ import {
   blueGrey,
 } from "@mui/material/colors";
 import { useUpdateUserPreferencesMutation } from "../../../api/metalApi";
+import { useNavigate } from "react-router-dom";
 
 const EditUserPreferences = () => {
+  const navigate = useNavigate();
+  const userPreferences = useSelector(
+    (state) => state.userPreferences.userPreferences
+  );
+
+  const handleNavigateBack = () => {
+    navigate(-1);
+  };
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [value, setValue] = useState(0);
-  const [primaryColor, setPrimaryColor] = useState(blue);
+  const [primaryColor, setPrimaryColor] = useState(
+    userPreferences.primaryColor
+  );
   const [primaryShade, setPrimaryShade] = useState(500);
-  const [secondaryColor, setSecondaryColor] = useState(blue);
+  const [secondaryColor, setSecondaryColor] = useState(
+    userPreferences.secondaryColor
+  );
   const [secondaryShade, setSecondaryShade] = useState(500);
 
   const primaryColorOptions = [
@@ -116,10 +130,6 @@ const EditUserPreferences = () => {
     { color: blueGrey[secondaryShade], label: "Blue Grey", key: "blueGrey" },
   ];
 
-  const userPreferences = useSelector(
-    (state) => state.userPreferences.userPreferences
-  );
-
   const [preferencesData, setPreferencesData] = useState({
     profilePic: userPreferences.profilePic,
     primaryColor: userPreferences.primaryColor,
@@ -183,7 +193,6 @@ const EditUserPreferences = () => {
       },
     })
       .then((response) => {
-        console.log("User preferences updated successfully");
         if (response) {
           alert("User preferences updated successfully");
           dispatch(
@@ -344,6 +353,9 @@ const EditUserPreferences = () => {
                 marginTop: "20px",
               }}
             >
+              <Button variant="contained" onClick={handleNavigateBack}>
+                Back
+              </Button>
               <Button variant="contained" onClick={handleUpload}>
                 Save Preferences
               </Button>

@@ -103,6 +103,9 @@ export const metalApi = createApi({
     getReview: builder.query({
       query: ({ productId }) => `/api/products/${productId}/reviews`,
     }),
+    getReviewByUser: builder.query({
+      query: (userId) => `api/reviews/user/${userId}`,
+    }),
     createReview: builder.mutation({
       query: ({ productId, reviewData }) => ({
         url: `/api/products/${productId}/reviews`,
@@ -130,6 +133,9 @@ export const metalApi = createApi({
         body: orderData,
       }),
     }),
+    getUserOrders: builder.query({
+      query: (userId) => `/api/orders/${userId}`,
+    }),
     getUserInformation: builder.query({
       query: ({ userId }) => `auth/user/${userId}/information`,
     }),
@@ -141,7 +147,7 @@ export const metalApi = createApi({
       }),
     }),
     updateUserInformation: builder.mutation({
-      query: (userId, userInfo) => ({
+      query: ({ userInfo, userId }) => ({
         url: `auth/user/${userId}/information`,
         method: "PUT",
         body: userInfo,
@@ -171,10 +177,12 @@ export const {
   useUpdateUserPreferencesMutation,
   useDeleteUserPreferencesMutation,
   useGetReviewQuery,
+  useGetReviewByUserQuery,
   useCreateReviewMutation,
   useUpdateReviewMutation,
   useDeleteReviewMutation,
   useCreateOrderMutation,
+  useGetUserOrdersQuery,
   useGetUserInformationQuery,
   useCreateUserInformationMutation,
   useUpdateUserInformationMutation,

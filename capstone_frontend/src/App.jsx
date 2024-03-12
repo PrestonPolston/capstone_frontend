@@ -16,6 +16,8 @@ import UserInfo from "./components/user/userInfo/UserInfo";
 import UpdateUser from "./components/user/userInfo/ChangeLogin";
 import EditUserPreferences from "./components/user/userInfo/UserPreferences";
 import FetchUserDataPage from "./components/FetchUserData";
+import GetReviewByUser from "./components/user/userInfo/review/UserReviews";
+import UserOrders from "./components/user/userInfo/UserOrders";
 
 function App() {
   const darkMode = useSelector((state) => state.theme.darkTheme);
@@ -27,10 +29,10 @@ function App() {
     palette: {
       mode: darkMode ? "dark" : "light",
       primary: {
-        main: userPreferences.primaryColor || "#1976d2",
+        main: userPreferences?.primaryColor || "#1976d2",
       },
       background: {
-        default: darkMode ? "#222" : userPreferences.secondaryColor || "#fff",
+        default: darkMode ? "#222" : userPreferences?.secondaryColor || "#fff",
       },
       text: {
         primary: darkMode ? "#fff" : "#111",
@@ -65,7 +67,9 @@ function App() {
           <Route path="/userInfo" element={<UserInfo />} />
           <Route path="/updateLogin" element={<UpdateUser />} />
           <Route path="/editpreferences" element={<EditUserPreferences />} />
-          \<Route path="/fetch-user-data" element={<FetchUserDataPage />} />
+          <Route path="/fetch-user-data" element={<FetchUserDataPage />} />
+          <Route path="/getUserReview" element={<GetReviewByUser />} />
+          <Route path="/getUserOrders" element={<UserOrders />} />
         </Routes>
         <CartIcon />
       </div>

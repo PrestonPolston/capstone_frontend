@@ -87,13 +87,13 @@ const AccountInfo = () => {
           </Link>
         </Grid>
         <Grid item xs={4}>
-          <Link to="/blank" style={{ textDecoration: "none" }}>
+          {/* <Link to="/blank" style={{ textDecoration: "none" }}>
             <Card>
               <CardContent>
                 <h2>Wish List</h2>
               </CardContent>
             </Card>
-          </Link>
+          </Link> */}
         </Grid>
       </Grid>
     </div>

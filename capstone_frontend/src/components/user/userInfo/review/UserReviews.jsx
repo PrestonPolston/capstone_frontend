@@ -11,8 +11,9 @@ import {
   TextField,
 } from "@mui/material";
 import { useUpdateReviewMutation } from "../../../../api/metalApi";
-import { setUserReview } from "../../../../slice/userReviews";
+import { setUserReview } from "../../../../slice/userSlices/userReviews";
 import { useNavigate } from "react-router-dom";
+import manageUserReviewStorage from "../../../../app/sessionStorage/userReviewsStorage";
 
 const GetReviewByUser = () => {
   const userPreferences = useSelector(
@@ -20,8 +21,16 @@ const GetReviewByUser = () => {
   );
   const navigate = useNavigate();
 
-  const user = useSelector((state) => state.user);
-  const userReviews = useSelector((state) => state.userReview.userReview) || [];
+  const user = useSelector((state) => state.user?.user || state.user);
+
+  const userReviews = useSelector((state) => {
+    if (state.userReviews > 0) {
+      return state.userReviews;
+    } else {
+      return manageUserReviewStorage.retrieveFromSessionStorage("userReview");
+    }
+  });
+
   const [selectedReviewId, setSelectedReviewId] = useState(null);
   const [ratingValue, setRatingValue] = useState(null);
   const [isLoadingReviews, setIsLoadingReviews] = useState(true);
@@ -40,7 +49,7 @@ const GetReviewByUser = () => {
     const reviewToEdit = userReviews.find((review) => review.id === reviewId);
     setReviewContent(reviewToEdit.content);
     setRatingValue(reviewToEdit.rating);
-    setProductId(reviewToEdit.productId);
+    setProductId(reviewToEdit.product.id);
   };
 
   const handleCloseEditForm = () => {
@@ -50,13 +59,15 @@ const GetReviewByUser = () => {
 
   const handleUpdateReview = async () => {
     try {
-      console.log(
-        "Updated review content:",
-        ratingValue,
-        reviewContent,
-        productId
-      );
+      console.log("Updating review with the following data:");
+      console.log("User ID:", user.id);
+      console.log("Rating Value:", ratingValue);
+      console.log("Review Content:", reviewContent);
+      console.log("Product ID:", productId);
+
+      // Make the API call to update the review
       const response = await updateReviewMutation({
+        userId: user.id,
         productId,
         reviewId: selectedReviewId,
         reviewData: {
@@ -64,8 +75,8 @@ const GetReviewByUser = () => {
           rating: ratingValue,
         },
       });
+
       console.log("Update Review API response:", response);
-      dispatch(setUserReview(response.data));
       handleCloseEditForm();
     } catch (error) {
       console.error("Error updating review:", error);
@@ -87,7 +98,6 @@ const GetReviewByUser = () => {
       >
         <div>
           <Typography variant="h4">{`${user.firstName}'s Reviews`}</Typography>
-          {/* You can modify typography as needed for user's first name */}
         </div>
         <Button variant="contained" onClick={handleGoBack}>
           Back

@@ -114,10 +114,13 @@ export const metalApi = createApi({
       }),
     }),
     updateReview: builder.mutation({
-      query: ({ productId, reviewId, reviewData }) => ({
+      query: ({ userId, productId, reviewId, reviewData }) => ({
         url: `/api/products/${productId}/reviews/${reviewId}`,
         method: "PUT",
-        body: reviewData,
+        body: {
+          userId,
+          ...reviewData,
+        },
       }),
     }),
     deleteReview: builder.mutation({

@@ -1,12 +1,11 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import GetAllProducts from "./components/products";
-import GetAllUsers from "./components/user/GetUser";
-import Login from "./components/user/login";
+import GetAllProducts from "./components/products/products";
+import Login from "./components/login/login";
 import NavBar from "./components/NavBar";
 import AccountInfo from "./components/user/userInfo/AccountHome";
-import SingleProduct from "./components/singleProductPage/SingleProduct";
+import SingleProduct from "./components/products/singleProductPage/SingleProduct";
 import UserStepper from "./components/user/registerStepper/UserStepper";
 import { useSelector } from "react-redux";
 import CartIcon from "./components/cart/CartIcon";
@@ -15,14 +14,15 @@ import Checkout from "./components/cart/checkout/Checkout";
 import UserInfo from "./components/user/userInfo/UserInfo";
 import UpdateUser from "./components/user/userInfo/ChangeLogin";
 import EditUserPreferences from "./components/user/userInfo/UserPreferences";
-import FetchUserDataPage from "./components/FetchUserData";
+import FetchUserDataPage from "./components/login/FetchUserData";
 import GetReviewByUser from "./components/user/userInfo/review/UserReviews";
 import UserOrders from "./components/user/userInfo/UserOrders";
+import GetProductsByClass from "./components/products/productsClass";
 
 function App() {
   const darkMode = useSelector((state) => state.theme.darkTheme);
   const userPreferences = useSelector(
-    (state) => state.userPreferences.userPreferences
+    (state) => state.userPreferences?.userPreferences || state.userPreferences
   );
 
   const theme = createTheme({
@@ -56,9 +56,9 @@ function App() {
       >
         <NavBar />
         <Routes>
-          <Route path="/users" element={<GetAllUsers />} />
           <Route path="/" element={<GetAllProducts />} />
           <Route path="/product/:id" element={<SingleProduct />} />
+          <Route path="/products/:classItem" element={<GetProductsByClass />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<UserStepper />} />
           <Route path="/accountInfo" element={<AccountInfo />} />
@@ -67,7 +67,7 @@ function App() {
           <Route path="/userInfo" element={<UserInfo />} />
           <Route path="/updateLogin" element={<UpdateUser />} />
           <Route path="/editpreferences" element={<EditUserPreferences />} />
-          <Route path="/fetch-user-data" element={<FetchUserDataPage />} />
+          <Route path="/fetchUserData" element={<FetchUserDataPage />} />
           <Route path="/getUserReview" element={<GetReviewByUser />} />
           <Route path="/getUserOrders" element={<UserOrders />} />
         </Routes>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { decodeBase64Image } from "../../app/encode_decode";
-import { useGetProductQuery } from "../../api/metalApi";
+import { decodeBase64Image } from "../../../app/encode_decode";
+import { useGetProductQuery } from "../../../api/metalApi";
 import {
   Card,
   CardContent,
@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import InfoTab from "./TabSingleProduct";
-import { addToCart } from "../../slice/cartSlice";
+import { addToCart } from "../../../slice/cartSlice";
 import { useDispatch } from "react-redux";
 
 const SingleProduct = () => {

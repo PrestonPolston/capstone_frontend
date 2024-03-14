@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGetProductsQuery } from "../api/metalApi";
-import { decodeBase64Image } from "../app/encode_decode";
+import { useGetProductsQuery } from "../../api/metalApi";
+import { decodeBase64Image } from "../../app/encode_decode";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../slice/cartSlice";
+import { addToCart } from "../../slice/cartSlice";
 import {
   Card,
   CardContent,

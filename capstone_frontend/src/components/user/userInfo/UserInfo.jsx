@@ -12,8 +12,6 @@ import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { decodeBase64Image } from "../../../app/encode_decode";
-import { setUser } from "../../../slice/getUserSlice";
-import { setUserInfo } from "../../../slice/getUserInfo";
 import {
   useUpdateUserMutation,
   useUpdateUserInformationMutation,
@@ -21,11 +19,17 @@ import {
 
 const UserInfo = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const fetchedUserData = useSelector((state) => state.user);
-  const fetchedUserInfo = useSelector((state) => state.userInfo.userInfo);
+
+  const fetchedUserData = useSelector(
+    (state) => state.user?.user || state.user
+  );
+
+  const fetchedUserInfo = useSelector(
+    (state) => state.userInfo?.userInfo || state.userInfo
+  );
+
   const userPreferences = useSelector(
-    (state) => state.userPreferences.userPreferences
+    (state) => state.userPreferences?.userPreferences || state.userPreferences
   );
   const [updateUser] = useUpdateUserMutation();
   const [updateUserInfo] = useUpdateUserInformationMutation();
@@ -78,7 +82,7 @@ const UserInfo = () => {
           admin: fetchedUserData.admin,
         },
       });
-      dispatch(setUser(response.data));
+
       setDetailsDialogOpen(false);
       handleInfoDialogOpen();
     } catch (error) {
@@ -104,8 +108,6 @@ const UserInfo = () => {
           country: editingUserInfo.country,
         },
       });
-      console.log(response);
-      dispatch(setUserInfo(response.data));
       setInfoDialogOpen(false);
     } catch (error) {
       console.error("Error updating user information:", error);
@@ -119,17 +121,6 @@ const UserInfo = () => {
   const handleEditInfo = () => {
     handleInfoDialogOpen();
   };
-
-  const userName = fetchedUserData.username || "N/A";
-  const fullName = `${fetchedUserData.firstName || ""} ${
-    fetchedUserData.lastName || ""
-  }`;
-  const email = fetchedUserData.email || "N/A";
-  const address = fetchedUserInfo.address || "N/A";
-  const state = fetchedUserInfo.state || "N/A";
-  const city = fetchedUserInfo.city || "N/A";
-  const postalCode = fetchedUserInfo.postalCode || "N/A";
-  const country = fetchedUserInfo.country || "N/A";
 
   const decodedProfilePic = userPreferences?.profilePic
     ? decodeBase64Image(userPreferences.profilePic)
@@ -161,14 +152,24 @@ const UserInfo = () => {
       <Avatar alt="Profile Picture" src={decodedProfilePic} sx={avatarStyle} />
       <Card sx={cardContentStyle}>
         <Typography variant="h5">User Information</Typography>
-        <Typography variant="body1">Username: {userName}</Typography>
-        <Typography variant="body1">Full Name: {fullName}</Typography>
-        <Typography variant="body1">Email: {email}</Typography>
-        <Typography variant="body1">Address: {address}</Typography>
-        <Typography variant="body1">State: {state}</Typography>
-        <Typography variant="body1">City: {city}</Typography>
-        <Typography variant="body1">Postal Code: {postalCode}</Typography>
-        <Typography variant="body1">Country: {country}</Typography>
+        <Typography variant="body1">
+          Username: {fetchedUserData.username}
+        </Typography>
+        <Typography variant="body1">
+          Full Name: {fetchedUserData.firstName} {fetchedUserData.lastName}
+        </Typography>
+        <Typography variant="body1">Email: {fetchedUserData.email}</Typography>
+        <Typography variant="body1">
+          Address: {fetchedUserInfo.address}
+        </Typography>
+        <Typography variant="body1">State: {fetchedUserInfo.state}</Typography>
+        <Typography variant="body1">City: {fetchedUserInfo.city}</Typography>
+        <Typography variant="body1">
+          Postal Code: {fetchedUserInfo.postalCode}
+        </Typography>
+        <Typography variant="body1">
+          Country: {fetchedUserInfo.country}
+        </Typography>
 
         <div>
           <IconButton

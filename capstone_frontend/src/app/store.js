@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { metalApi } from "../api/metalApi";
 import productsSlice from "../slice/getProductsSlice";
-import getUserSlice from "../slice/getUserSlice";
+import getUserSlice from "../slice/userSlices/getUserSlice";
 import themeSlice from "../slice/themeSlice";
 import cartSlice from "../slice/cartSlice";
-import getUserPreferences from "../slice/getUserPreferences";
-import getUserInfo from "../slice/getUserInfo";
-import getUserReviewSlice from "../slice/userReviews";
-import userOrdersSlice from "../slice/userOrdersSlice";
+import getUserPreferences from "../slice/userSlices/getUserPreferences";
+import getUserInfo from "../slice/userSlices/getUserInfo";
+import getUserReviewSlice from "../slice/userSlices/userReviews";
+import userOrdersSlice from "../slice/userSlices/userOrdersSlice";
 
 export const store = configureStore({
   reducer: {

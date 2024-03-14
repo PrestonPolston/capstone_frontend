@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import ReviewForm from "./ReviewForm";
-import { useGetReviewQuery } from "../../api/metalApi";
+import { useGetReviewQuery } from "../../../api/metalApi";
 
 const GetProductReview = ({ productId }) => {
   const {

@@ -17,8 +17,6 @@ import {
   encodeImageToBase64,
   decodeBase64Image,
 } from "../../../app/encode_decode";
-import { setUserPreferences } from "../../../slice/userPreferencesSlice";
-import { useDispatch } from "react-redux";
 import {
   amber,
   indigo,
@@ -45,9 +43,8 @@ import { useNavigate } from "react-router-dom";
 const EditUserPreferences = () => {
   const navigate = useNavigate();
   const userPreferences = useSelector(
-    (state) => state.userPreferences.userPreferences
+    (state) => state.userPreferences?.userPreferences || state.userPreferences
   );
-
   const handleNavigateBack = () => {
     navigate(-1);
   };
@@ -182,7 +179,6 @@ const EditUserPreferences = () => {
       }));
     }
   };
-  const dispatch = useDispatch();
   const handleUpload = () => {
     updateUserPreferences({
       userId: userPreferences.userId,
@@ -195,14 +191,6 @@ const EditUserPreferences = () => {
       .then((response) => {
         if (response) {
           alert("User preferences updated successfully");
-          dispatch(
-            setUserPreferences({
-              userId: userPreferences.userId,
-              primaryColor: primaryColor,
-              secondaryColor: secondaryColor,
-              profilePic: preferencesData.profilePic,
-            })
-          );
         }
       })
       .catch((error) => {

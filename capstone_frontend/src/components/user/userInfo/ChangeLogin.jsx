@@ -9,7 +9,13 @@ import { useSelector } from "react-redux";
 import { useUpdateUserMutation } from "../../../api/metalApi";
 
 const UpdateUser = () => {
-  const userLoginInfo = useSelector((state) => state.user);
+  const userLoginInfo = useSelector((state) => {
+    if (state.user) {
+      return state.user;
+    } else {
+      return manageUserStorage.retrieveFromSessionStorage("user");
+    }
+  });
   const [updateUser] = useUpdateUserMutation();
   const userId = userLoginInfo.id;
   const initialUserData = {

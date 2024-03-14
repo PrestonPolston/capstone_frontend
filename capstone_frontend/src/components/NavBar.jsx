@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import List from "@mui/material/List";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -18,20 +17,22 @@ import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../slice/themeSlice";
 import { useLogoutUserMutation } from "../api/metalApi";
 import { decodeBase64Image } from "../app/encode_decode";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const NavBar = () => {
-  const location = useLocation();
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
   const darkTheme = useSelector((state) => state.theme.darkTheme);
-  const userId = localStorage.getItem("userId");
+  const user = useSelector((state) => state.user?.user || state.user);
+  const productList = useSelector((state) => state.products.productList);
   const [logoutUser] = useLogoutUserMutation();
-  const [id, setId] = useState(localStorage.getItem("userId"));
 
   const userPreferences = useSelector(
-    (state) => state.userPreferences.userPreferences
+    (state) => state.userPreferences?.userPreferences || state.userPreferences
   );
 
   const profilePic = userPreferences?.profilePic;
@@ -52,21 +53,28 @@ const NavBar = () => {
     dispatch(toggleTheme());
   };
 
-  useEffect(() => {
-    const storedUserId = localStorage.getItem("userId");
-    setId(storedUserId);
-  }, [location]);
-
   const handleLogout = async () => {
     try {
-      const Id = localStorage.getItem("userId");
-      await logoutUser({ Id });
+      await logoutUser();
       handleClose();
-      localStorage.removeItem("userId");
+      sessionStorage.removeItem("user");
+      sessionStorage.removeItem("userPreferences");
+      sessionStorage.removeItem("userInfo");
+      sessionStorage.removeItem("userOrders");
+      sessionStorage.removeItem("userReview");
+      window.location.reload();
     } catch (error) {
       console.error("Error logging out:", error);
     }
   };
+
+  const productListArray =
+    typeof productList === "object" && Array.isArray(productList)
+      ? productList
+      : [];
+  const classes = Array.from(
+    new Set(productListArray.map((product) => product.class))
+  );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -105,7 +113,7 @@ const NavBar = () => {
               inputProps={{ "aria-label": "search" }}
             />
           </div>
-          {userId ? (
+          {user.id ? (
             <IconButton
               size="large"
               edge="end"
@@ -152,7 +160,21 @@ const NavBar = () => {
               Products
             </Link>
           </ListItem>
-          <ListItem button onClick={toggleMenu}>
+          {classes.map((classItem) => (
+            <ListItem key={classItem} button onClick={toggleMenu}>
+              <Link
+                to={`/products/${classItem}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                {classItem}
+              </Link>
+            </ListItem>
+          ))}
+          <ListItem
+            button
+            onClick={toggleMenu}
+            style={{ display: user.id ? "block" : "none" }}
+          >
             <Link
               to="/userInfo"
               style={{ textDecoration: "none", color: "inherit" }}
@@ -160,7 +182,11 @@ const NavBar = () => {
               User Info
             </Link>
           </ListItem>
-          <ListItem button onClick={toggleMenu}>
+          <ListItem
+            button
+            onClick={toggleMenu}
+            style={{ display: user.id ? "block" : "none" }}
+          >
             <Link
               to="/updateLogin"
               style={{ textDecoration: "none", color: "inherit" }}
@@ -168,7 +194,11 @@ const NavBar = () => {
               Update Login Info
             </Link>
           </ListItem>
-          <ListItem button onClick={toggleMenu}>
+          <ListItem
+            button
+            onClick={toggleMenu}
+            style={{ display: user.id ? "block" : "none" }}
+          >
             <Link
               to="/editpreferences"
               style={{ textDecoration: "none", color: "inherit" }}

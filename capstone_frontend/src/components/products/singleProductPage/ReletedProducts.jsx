@@ -9,8 +9,8 @@ import {
   IconButton,
   TextField,
 } from "@mui/material";
-import { decodeBase64Image } from "../../app/encode_decode";
-import { useGetProductsQuery } from "../../api/metalApi";
+import { decodeBase64Image } from "../../../app/encode_decode";
+import { useGetProductsQuery } from "../../../api/metalApi";
 
 const RelatedProducts = () => {
   const { data: products, isLoading, error } = useGetProductsQuery();

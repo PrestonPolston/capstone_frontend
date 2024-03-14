@@ -28,15 +28,11 @@ export default function Login() {
     event.preventDefault();
     try {
       const response = await loginUser(formData);
-      if (response.data) {
-        const userId = response.data.user.id;
 
-        localStorage.setItem("userId", userId);
+      const userId = response.data.user.id;
+      localStorage.setItem("userId", userId);
 
-        navigate("/fetch-user-data");
-      } else {
-        console.error("Failed to fetch user data.");
-      }
+      navigate("/fetchUserData");
     } catch (error) {
       console.error("Login failed:", error);
     }

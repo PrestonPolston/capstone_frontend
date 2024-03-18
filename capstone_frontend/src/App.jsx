@@ -18,6 +18,7 @@ import FetchUserDataPage from "./components/login/FetchUserData";
 import GetReviewByUser from "./components/user/userInfo/review/UserReviews";
 import UserOrders from "./components/user/userInfo/UserOrders";
 import GetProductsByClass from "./components/products/productsClass";
+import AdminLanding from "./components/user/admin/AdminLanding";
 
 function App() {
   const darkMode = useSelector((state) => state.theme.darkTheme);
@@ -70,6 +71,7 @@ function App() {
           <Route path="/fetchUserData" element={<FetchUserDataPage />} />
           <Route path="/getUserReview" element={<GetReviewByUser />} />
           <Route path="/getUserOrders" element={<UserOrders />} />
+          <Route path="/adminLanding" element={<AdminLanding />} />
         </Routes>
         <CartIcon />
       </div>

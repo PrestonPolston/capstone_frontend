@@ -35,6 +35,8 @@ const NavBar = () => {
     (state) => state.userPreferences?.userPreferences || state.userPreferences
   );
 
+  const isAdmin = user.admin;
+
   const profilePic = userPreferences?.profilePic;
 
   const toggleMenu = () => {
@@ -63,6 +65,7 @@ const NavBar = () => {
       sessionStorage.removeItem("userOrders");
       sessionStorage.removeItem("userReview");
       window.location.reload();
+      navigate("/");
     } catch (error) {
       console.error("Error logging out:", error);
     }
@@ -204,6 +207,18 @@ const NavBar = () => {
               style={{ textDecoration: "none", color: "inherit" }}
             >
               Edit Preferences
+            </Link>
+          </ListItem>
+          <ListItem
+            button
+            onClick={toggleMenu}
+            style={{ display: isAdmin ? "block" : "none" }}
+          >
+            <Link
+              to="/adminLanding"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              Admin
             </Link>
           </ListItem>
         </List>

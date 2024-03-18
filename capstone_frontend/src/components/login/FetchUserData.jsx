@@ -33,8 +33,14 @@ const FetchUserDataPage = () => {
   }
 
   if (allUserData) {
-    localStorage.removeItem("userId");
-    navigate("/");
+    const isAdmin = allUserData.userDetails.admin;
+    if (isAdmin === true) {
+      localStorage.removeItem("userId");
+      navigate("/adminLanding");
+    } else {
+      localStorage.removeItem("userId");
+      navigate("/");
+    }
   }
 
   return null;

@@ -11,7 +11,6 @@ import {
   TextField,
 } from "@mui/material";
 import { useUpdateReviewMutation } from "../../../../api/metalApi";
-import { setUserReview } from "../../../../slice/userSlices/userReviews";
 import { useNavigate } from "react-router-dom";
 import manageUserReviewStorage from "../../../../app/sessionStorage/userReviewsStorage";
 
@@ -65,7 +64,6 @@ const GetReviewByUser = () => {
       console.log("Review Content:", reviewContent);
       console.log("Product ID:", productId);
 
-      // Make the API call to update the review
       const response = await updateReviewMutation({
         userId: user.id,
         productId,

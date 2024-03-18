@@ -135,7 +135,7 @@ const UpdateUser = () => {
             <Button
               onClick={handleBack}
               variant="contained"
-              color="secondary"
+              color="primary"
               size="small"
               style={{ marginRight: "10px" }}
             >

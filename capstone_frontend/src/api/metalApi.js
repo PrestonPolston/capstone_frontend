@@ -3,17 +3,17 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const metalApi = createApi({
   reducerPath: "metalApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3000/",
+    baseUrl: "https://capstone-backend-spxi.onrender.com",
   }),
   endpoints: (builder) => ({
     getUsers: builder.query({ query: () => "/auth/user" }),
     getUser: builder.query({ query: (id) => `/auth/user/${id}` }),
     getAllUserInfo: builder.query({
-      query: (userId) => `auth/user/${userId}/allinfo`,
+      query: (userId) => `/auth/user/${userId}/allinfo`,
     }),
     updateUser: builder.mutation({
       query: ({ userId, userData }) => ({
-        url: `auth/user/${userId}`,
+        url: `/auth/user/${userId}`,
         method: "PUT",
         body: userData,
       }),
@@ -104,7 +104,7 @@ export const metalApi = createApi({
       query: ({ productId }) => `/api/products/${productId}/reviews`,
     }),
     getReviewByUser: builder.query({
-      query: (userId) => `api/reviews/user/${userId}`,
+      query: (userId) => `/api/reviews/user/${userId}`,
     }),
     createReview: builder.mutation({
       query: ({ productId, reviewData }) => ({
@@ -140,18 +140,18 @@ export const metalApi = createApi({
       query: (userId) => `/api/orders/${userId}`,
     }),
     getUserInformation: builder.query({
-      query: ({ userId }) => `auth/user/${userId}/information`,
+      query: ({ userId }) => `/auth/user/${userId}/information`,
     }),
     createUserInformation: builder.mutation({
       query: ({ userData, userId }) => ({
-        url: `auth/user/${userId}/information`,
+        url: `/auth/user/${userId}/information`,
         method: "POST",
         body: userData,
       }),
     }),
     updateUserInformation: builder.mutation({
       query: ({ userInfo, userId }) => ({
-        url: `auth/user/${userId}/information`,
+        url: `/auth/user/${userId}/information`,
         method: "PUT",
         body: userInfo,
       }),

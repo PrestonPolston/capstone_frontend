@@ -64,6 +64,7 @@ const NavBar = () => {
       sessionStorage.removeItem("userInfo");
       sessionStorage.removeItem("userOrders");
       sessionStorage.removeItem("userReview");
+      localStorage.removeItem("userId");
       window.location.reload();
       navigate("/");
     } catch (error) {

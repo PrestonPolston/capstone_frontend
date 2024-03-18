@@ -35,10 +35,8 @@ const FetchUserDataPage = () => {
   if (allUserData) {
     const isAdmin = allUserData.userDetails.admin;
     if (isAdmin === true) {
-      localStorage.removeItem("userId");
       navigate("/adminLanding");
     } else {
-      localStorage.removeItem("userId");
       navigate("/");
     }
   }

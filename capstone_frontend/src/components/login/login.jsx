@@ -31,7 +31,7 @@ export default function Login() {
 
       const userId = response.data.user.id;
       localStorage.setItem("userId", userId);
-
+      console.log(response.data);
       navigate("/fetchUserData");
     } catch (error) {
       console.error("Login failed:", error);

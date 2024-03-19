@@ -27,11 +27,12 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      console.log(formData);
       const response = await loginUser(formData);
-
+      console.log(response);
       const userId = response.data.user.id;
       localStorage.setItem("userId", userId);
-      console.log(response.data);
+
       navigate("/fetchUserData");
     } catch (error) {
       console.error("Login failed:", error);

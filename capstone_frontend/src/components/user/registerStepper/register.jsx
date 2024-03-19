@@ -89,6 +89,8 @@ export default function Register({ handleNext }) {
                 type="password"
                 id="password"
                 autoComplete="new-password"
+                value={formData.password}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
